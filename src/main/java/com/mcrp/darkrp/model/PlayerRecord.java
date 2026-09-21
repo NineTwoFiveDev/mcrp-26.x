@@ -21,6 +21,9 @@ public class PlayerRecord {
     private String wantedReason = "";
     private long wantedExpiryMillis;
 
+    // Bounty placed on this player by other players, payable on a PvP kill or arrest.
+    private double bounty;
+
     public PlayerRecord(UUID uuid, String name, double balance, String jobId) {
         this.uuid = uuid;
         this.name = name;
@@ -98,5 +101,13 @@ public class PlayerRecord {
 
     public void setWantedExpiryMillis(long wantedExpiryMillis) {
         this.wantedExpiryMillis = wantedExpiryMillis;
+    }
+
+    public double getBounty() {
+        return bounty;
+    }
+
+    public void setBounty(double bounty) {
+        this.bounty = Math.max(0.0, bounty);
     }
 }

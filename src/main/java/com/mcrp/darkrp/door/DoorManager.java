@@ -343,6 +343,17 @@ public class DoorManager {
         return group == null ? null : getRecord(group);
     }
 
+    /** All doors owned or co-owned by the given player, in no particular order. */
+    public List<DoorRecord> getDoorsOwnedBy(UUID uuid) {
+        List<DoorRecord> owned = new ArrayList<>();
+        for (DoorRecord record : doors.values()) {
+            if (record.isOwnedBy(uuid)) {
+                owned.add(record);
+            }
+        }
+        return owned;
+    }
+
     /** Unlocks a door regardless of who owns it, bypassing the usual owner check. Used by lockpicking. */
     public boolean forceUnlock(Block clicked) {
         DoorRecord record = getRecordFor(clicked);

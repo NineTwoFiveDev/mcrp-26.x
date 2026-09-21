@@ -79,3 +79,8 @@ lockpick:
 scoreboard:
   # Sidebar HUD showing job, balance and wanted status. Players can hide it with /scoreboard.
   enabled: true
+
+advert:
+  # Cost to broadcast an /advert message. 0 makes it free.
+  cost: 25.0
+  cooldown-seconds: 60

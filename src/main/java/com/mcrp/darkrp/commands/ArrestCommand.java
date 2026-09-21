@@ -1,5 +1,6 @@
 package com.mcrp.darkrp.commands;
 
+import com.mcrp.darkrp.crime.BountyManager;
 import com.mcrp.darkrp.crime.JailManager;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.util.Completions;
@@ -20,10 +21,12 @@ public class ArrestCommand implements CommandExecutor, TabCompleter {
 
     private final JailManager jailManager;
     private final JobManager jobManager;
+    private final BountyManager bountyManager;
 
-    public ArrestCommand(JailManager jailManager, JobManager jobManager) {
+    public ArrestCommand(JailManager jailManager, JobManager jobManager, BountyManager bountyManager) {
         this.jailManager = jailManager;
         this.jobManager = jobManager;
+        this.bountyManager = bountyManager;
     }
 
     @Override
@@ -61,6 +64,9 @@ public class ArrestCommand implements CommandExecutor, TabCompleter {
         }
         jailManager.jail(target, seconds);
         Msg.success(sender, "You arrested " + target.getName() + " for " + seconds + " seconds.");
+        if (sender instanceof Player police) {
+            bountyManager.payout(target, police);
+        }
         return true;
     }
 

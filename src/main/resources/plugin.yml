@@ -62,6 +62,14 @@ commands:
   baltop:
     description: List the richest players on the server.
     usage: /<command> [count]
+  bounty:
+    description: Place a cash bounty on a player, or list active bounties.
+    usage: /<command> <player> <amount>|list
+  advert:
+    description: Broadcast an advertisement to the server.
+    usage: /<command> <message>
+  mydoors:
+    description: List the doors you own or co-own.
   darkrp:
     description: DarkRP administration command.
     usage: /<command> <reload|setbalance|give> [args]

@@ -52,6 +52,7 @@ public class DataStore {
             record.setWanted(yaml.getBoolean(path + "wanted", false));
             record.setWantedReason(yaml.getString(path + "wanted-reason", ""));
             record.setWantedExpiryMillis(yaml.getLong(path + "wanted-expiry", 0));
+            record.setBounty(yaml.getDouble(path + "bounty", 0.0));
             players.put(uuid, record);
         }
         plugin.getLogger().info("Loaded " + players.size() + " player record(s).");
@@ -69,6 +70,7 @@ public class DataStore {
             yaml.set(path + "wanted", record.isWanted());
             yaml.set(path + "wanted-reason", record.getWantedReason());
             yaml.set(path + "wanted-expiry", record.getWantedExpiryMillis());
+            yaml.set(path + "bounty", record.getBounty());
         }
         try {
             if (!plugin.getDataFolder().exists()) {

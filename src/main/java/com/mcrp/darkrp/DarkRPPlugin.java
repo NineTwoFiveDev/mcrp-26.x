@@ -1,7 +1,9 @@
 package com.mcrp.darkrp;
 
+import com.mcrp.darkrp.commands.AdvertCommand;
 import com.mcrp.darkrp.commands.ArrestCommand;
 import com.mcrp.darkrp.commands.BalTopCommand;
+import com.mcrp.darkrp.commands.BountyCommand;
 import com.mcrp.darkrp.commands.DarkRPAdminCommand;
 import com.mcrp.darkrp.commands.DoorCommand;
 import com.mcrp.darkrp.commands.FreeKidnapCommand;
@@ -9,6 +11,7 @@ import com.mcrp.darkrp.commands.JobsCommand;
 import com.mcrp.darkrp.commands.KidnapCommand;
 import com.mcrp.darkrp.commands.MoneyCommand;
 import com.mcrp.darkrp.commands.MugCommand;
+import com.mcrp.darkrp.commands.MyDoorsCommand;
 import com.mcrp.darkrp.commands.PayCommand;
 import com.mcrp.darkrp.commands.PayRansomCommand;
 import com.mcrp.darkrp.commands.PrinterCommand;
@@ -19,6 +22,8 @@ import com.mcrp.darkrp.commands.ShipmentCommand;
 import com.mcrp.darkrp.commands.UnwantedCommand;
 import com.mcrp.darkrp.commands.WantedCommand;
 import com.mcrp.darkrp.commands.WarrantCommand;
+import com.mcrp.darkrp.crime.BountyDeathListener;
+import com.mcrp.darkrp.crime.BountyManager;
 import com.mcrp.darkrp.crime.JailGuardListener;
 import com.mcrp.darkrp.crime.JailManager;
 import com.mcrp.darkrp.crime.KidnapManager;
@@ -59,6 +64,7 @@ public final class DarkRPPlugin extends JavaPlugin {
     private WarrantManager warrantManager;
     private LockpickManager lockpickManager;
     private ScoreboardManager scoreboardManager;
+    private BountyManager bountyManager;
 
     @Override
     public void onEnable() {
@@ -82,6 +88,7 @@ public final class DarkRPPlugin extends JavaPlugin {
         kidnapManager = new KidnapManager(this, dataStore, economyManager, jobManager);
         lockpickManager = new LockpickManager(this, doorManager);
         scoreboardManager = new ScoreboardManager(this, economyManager, jobManager, wantedManager, dataStore);
+        bountyManager = new BountyManager(dataStore, economyManager);
 
         printerManager = new PrinterManager(this, economyManager, jobManager, dataStore);
         printerManager.load();
@@ -151,7 +158,7 @@ public final class DarkRPPlugin extends JavaPlugin {
         register("door", new DoorCommand(doorManager, economyManager));
         register("wanted", new WantedCommand(wantedManager, jobManager));
         register("unwanted", new UnwantedCommand(wantedManager, jobManager));
-        register("arrest", new ArrestCommand(jailManager, jobManager));
+        register("arrest", new ArrestCommand(jailManager, jobManager, bountyManager));
         register("release", new ReleaseCommand(jailManager, jobManager, dataStore));
         register("mug", new MugCommand(mugManager));
         register("printer", new PrinterCommand(printerManager, jobManager, economyManager));
@@ -162,6 +169,9 @@ public final class DarkRPPlugin extends JavaPlugin {
         register("warrant", new WarrantCommand(warrantManager, jobManager));
         register("scoreboard", new ScoreboardCommand(scoreboardManager));
         register("baltop", new BalTopCommand(economyManager));
+        register("bounty", new BountyCommand(bountyManager, economyManager));
+        register("advert", new AdvertCommand(this, economyManager));
+        register("mydoors", new MyDoorsCommand(doorManager));
         register("darkrp", new DarkRPAdminCommand(this, economyManager, jobManager, doorManager, printerManager, shipmentManager));
     }
 
@@ -182,5 +192,6 @@ public final class DarkRPPlugin extends JavaPlugin {
         pm.registerEvents(new DoorInteractListener(doorManager, economyManager, jobManager, warrantManager, lockpickManager), this);
         pm.registerEvents(new JailGuardListener(dataStore, jailManager), this);
         pm.registerEvents(new PrinterInteractListener(printerManager), this);
+        pm.registerEvents(new BountyDeathListener(bountyManager), this);
     }
 }

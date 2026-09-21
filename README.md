@@ -44,6 +44,12 @@ internally.
   name is also prefixed with your job's colored name.
 - **Economy leaderboard** — `/baltop [count]` lists the richest known
   players, online or offline.
+- **Bounties** — `/bounty <player> <amount>` puts a cash bounty on someone
+  (funded up front), `/bounty list` shows active ones. The bounty pays out
+  automatically to whoever kills that player in PvP or arrests them.
+- **Advertising** — `/advert <message>` broadcasts to the whole server, at a
+  configurable cost and per-player cooldown.
+- **`/mydoors`** — lists every door you own or co-own with its location.
 
 ## Project layout
 
@@ -56,7 +62,7 @@ src/main/java/com/mcrp/darkrp/
   job/                     - JobManager, job GUI
   door/                    - DoorManager, door interact/menu logic
   crime/                   - WantedManager, JailManager, MugManager, KidnapManager,
-                              WarrantManager, LockpickManager
+                              WarrantManager, LockpickManager, BountyManager
   printer/                 - PrinterManager, printer interact listener
   shipment/                - ShipmentManager
   hud/                     - ScoreboardManager (sidebar HUD)
@@ -110,7 +116,8 @@ If your server actually runs an older/newer Paper version, bump the
   tuning (range, channel time, steal %, cooldown), printer tuning (price,
   payout, bust chance, limits), kidnap tuning (range, radius, timeout,
   cooldown), the default warrant duration, lockpick tuning (item, channel
-  time, success chance, cooldown) and whether the sidebar HUD is enabled.
+  time, success chance, cooldown), whether the sidebar HUD is enabled, and
+  advert cost/cooldown.
 - `jobs.yml` — add/edit/remove jobs. Kit items use `MATERIAL:AMOUNT` strings.
 - `shipments.yml` — add/edit/remove buyable shipment types (item, amount,
   price, allowed jobs).
