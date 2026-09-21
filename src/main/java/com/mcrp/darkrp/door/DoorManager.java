@@ -333,12 +333,14 @@ public class DoorManager {
     }
 
     public boolean isLockedFor(Player player, Block clicked) {
-        Set<Block> group = findGroup(clicked);
-        if (group == null) {
-            return false;
-        }
-        DoorRecord record = getRecord(group);
+        DoorRecord record = getRecordFor(clicked);
         return record != null && record.isLocked() && !record.isOwnedBy(player.getUniqueId());
+    }
+
+    /** Convenience: finds the door group for a clicked block and looks up its record directly. */
+    public DoorRecord getRecordFor(Block clicked) {
+        Set<Block> group = findGroup(clicked);
+        return group == null ? null : getRecord(group);
     }
 
     private void closeGroup(Set<Block> group) {

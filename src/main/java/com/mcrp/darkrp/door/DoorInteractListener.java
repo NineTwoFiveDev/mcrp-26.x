@@ -1,6 +1,8 @@
 package com.mcrp.darkrp.door;
 
+import com.mcrp.darkrp.crime.WarrantManager;
 import com.mcrp.darkrp.economy.EconomyManager;
+import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.model.DoorRecord;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
@@ -19,10 +21,14 @@ public class DoorInteractListener implements Listener {
 
     private final DoorManager doorManager;
     private final EconomyManager economy;
+    private final JobManager jobManager;
+    private final WarrantManager warrantManager;
 
-    public DoorInteractListener(DoorManager doorManager, EconomyManager economy) {
+    public DoorInteractListener(DoorManager doorManager, EconomyManager economy, JobManager jobManager, WarrantManager warrantManager) {
         this.doorManager = doorManager;
         this.economy = economy;
+        this.jobManager = jobManager;
+        this.warrantManager = warrantManager;
     }
 
     @EventHandler
@@ -42,10 +48,20 @@ public class DoorInteractListener implements Listener {
             return;
         }
 
-        if (doorManager.isLockedFor(player, block)) {
-            event.setCancelled(true);
-            Msg.error(player, "This door is locked.");
+        DoorRecord record = doorManager.getRecordFor(block);
+        boolean locked = record != null && record.isLocked() && !record.isOwnedBy(player.getUniqueId());
+        if (!locked) {
+            return;
         }
+        boolean warrantBypass = record.getOwner() != null
+                && warrantManager.hasWarrant(record.getOwner())
+                && jobManager.canActAsPolice(player);
+        if (warrantBypass) {
+            Msg.raw(player, "<yellow>Bypassing lock under an active warrant.</yellow>");
+            return;
+        }
+        event.setCancelled(true);
+        Msg.error(player, "This door is locked.");
     }
 
     private void sendMenu(Player player, Block block) {

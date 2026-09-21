@@ -3,6 +3,8 @@ package com.mcrp.darkrp.commands;
 import com.mcrp.darkrp.door.DoorManager;
 import com.mcrp.darkrp.economy.EconomyManager;
 import com.mcrp.darkrp.job.JobManager;
+import com.mcrp.darkrp.printer.PrinterManager;
+import com.mcrp.darkrp.shipment.ShipmentManager;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -17,12 +19,17 @@ public class DarkRPAdminCommand implements CommandExecutor {
     private final EconomyManager economy;
     private final JobManager jobManager;
     private final DoorManager doorManager;
+    private final PrinterManager printerManager;
+    private final ShipmentManager shipmentManager;
 
-    public DarkRPAdminCommand(Plugin plugin, EconomyManager economy, JobManager jobManager, DoorManager doorManager) {
+    public DarkRPAdminCommand(Plugin plugin, EconomyManager economy, JobManager jobManager, DoorManager doorManager,
+                               PrinterManager printerManager, ShipmentManager shipmentManager) {
         this.plugin = plugin;
         this.economy = economy;
         this.jobManager = jobManager;
         this.doorManager = doorManager;
+        this.printerManager = printerManager;
+        this.shipmentManager = shipmentManager;
     }
 
     @Override
@@ -46,6 +53,8 @@ public class DarkRPAdminCommand implements CommandExecutor {
         jobManager.load();
         jobManager.startSalaryTask();
         doorManager.reloadConfig();
+        printerManager.reloadConfig();
+        shipmentManager.load();
         Msg.success(sender, "DarkRP configuration reloaded.");
     }
 

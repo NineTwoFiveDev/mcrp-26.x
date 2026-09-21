@@ -20,23 +20,40 @@ internally.
   either via the `police` job flag or the `darkrp.police` permission) and
   `/mug` (anyone can attempt to mug a nearby, non-police player for a cut of
   their cash).
+- **Money printers** — `/printer buy` places a marker block on top of the
+  block you're looking at; it pays its owner on an interval, with a
+  configurable per-cycle chance of "busting" (being destroyed). `/printer
+  sell` cashes one back in, `/printer confiscate` lets police seize one.
+- **Shipments** — `/shipment list`/`buy <type>` places a chest filled with a
+  configured item (weapons, medkits, ...) on top of the block you're looking
+  at, gated by job where configured (`shipments.yml`). `/shipment confiscate`
+  lets police seize one.
+- **Kidnapping & ransom** — `/kidnap <player> <ransom>` restrains a nearby
+  player (heavily slowed/weakened, snapped back if they wander off) and
+  broadcasts a ransom demand; anyone can free them with `/payransom
+  <player>`, police can override with `/freekidnap <player>`, and it
+  auto-releases after a timeout.
+- **Warrants** — `/warrant <player> [seconds]` (police-only) lets police
+  bypass that player's locked doors for the warrant's duration, for raids.
 
 ## Project layout
 
 ```
 src/main/java/com/mcrp/darkrp/
   DarkRPPlugin.java        - main class, wiring and scheduled tasks
-  model/                   - PlayerRecord, Job, DoorRecord
+  model/                   - PlayerRecord, Job, DoorRecord, PrinterRecord, ShipmentType
   storage/                 - DataStore (players.yml persistence)
   economy/                 - EconomyManager
   job/                     - JobManager, job GUI
   door/                    - DoorManager, door interact listener
-  crime/                   - WantedManager, JailManager, MugManager
+  crime/                   - WantedManager, JailManager, MugManager, KidnapManager, WarrantManager
+  printer/                 - PrinterManager, printer interact listener
+  shipment/                - ShipmentManager
   commands/                - one CommandExecutor per command
   listeners/               - join/quit
   util/                    - Msg (MiniMessage), ItemUtil, LocUtil
 src/main/resources/
-  plugin.yml, config.yml, jobs.yml
+  plugin.yml, config.yml, jobs.yml, shipments.yml
 ```
 
 ## Building
@@ -79,9 +96,14 @@ If your server actually runs an older/newer Paper version, bump the
 
 - `config.yml` — currency symbol, starting balance, salary interval, door
   prices/resale %, jail location & default sentence, wanted duration, mug
-  tuning (range, channel time, steal %, cooldown).
+  tuning (range, channel time, steal %, cooldown), printer tuning (price,
+  payout, bust chance, limits), kidnap tuning (range, radius, timeout,
+  cooldown) and the default warrant duration.
 - `jobs.yml` — add/edit/remove jobs. Kit items use `MATERIAL:AMOUNT` strings.
-- `/darkrp reload` reloads `config.yml` and `jobs.yml` without a restart.
+- `shipments.yml` — add/edit/remove buyable shipment types (item, amount,
+  price, allowed jobs).
+- `/darkrp reload` reloads `config.yml`, `jobs.yml` and `shipments.yml`
+  without a restart.
 
 ## Permissions
 
@@ -94,11 +116,13 @@ If your server actually runs an older/newer Paper version, bump the
 
 ## Known limitations / good next steps
 
-- Money printers and buyable shipments (weapon dealers) were scoped out of
-  this first pass; the job/economy/door foundation here is built to make
-  adding them straightforward (a `PrinterManager` following the same
-  DataStore + scheduled-task pattern as `JailManager` would drop right in).
-- Kidnapping/ransom and warrants are not implemented.
 - Door groups are detected by scanning contiguous door blocks in the 4
   horizontal directions at the same Y level (handles single and double
   doors); L-shaped or diagonal door clusters won't be grouped.
+- Money printers only tick while their chunk is loaded (a printer in an
+  unloaded area just pauses rather than accruing income), to avoid forcing
+  chunks to stay loaded.
+- Kidnap and warrant state is in-memory only (reset on restart) rather than
+  persisted, since both are meant to be short-lived.
+- No raid-timer/NLR (new-life-rule) enforcement — those remain server rules
+  rather than plugin-enforced mechanics.

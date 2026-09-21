@@ -1,0 +1,23 @@
+# Buyable weapon/item shipments. "/shipment buy <id>" places a chest filled
+# with the configured item on top of the block you're looking at.
+shipments:
+  pistol_crate:
+    display-name: "Crossbow Crate"
+    item: CROSSBOW
+    amount: 5
+    price: 300.0
+    allowed-jobs: ["gun_dealer"]
+
+  arrow_crate:
+    display-name: "Arrow Crate"
+    item: ARROW
+    amount: 64
+    price: 100.0
+    allowed-jobs: ["gun_dealer"]
+
+  medkit_crate:
+    display-name: "Medkit Crate"
+    item: GOLDEN_APPLE
+    amount: 5
+    price: 200.0
+    allowed-jobs: ["medic"]

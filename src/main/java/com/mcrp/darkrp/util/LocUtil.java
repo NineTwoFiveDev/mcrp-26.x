@@ -18,6 +18,25 @@ public final class LocUtil {
         return block.getWorld().getName() + ":" + block.getX() + ":" + block.getY() + ":" + block.getZ();
     }
 
+    /** Inverse of {@link #blockKey(Block)}. Returns null if the world isn't loaded. */
+    public static Block blockFromKey(String key) {
+        if (key == null || key.isBlank()) {
+            return null;
+        }
+        String[] p = key.split(":");
+        if (p.length < 4) {
+            return null;
+        }
+        World world = Bukkit.getWorld(p[0]);
+        if (world == null) {
+            return null;
+        }
+        int x = Integer.parseInt(p[1]);
+        int y = Integer.parseInt(p[2]);
+        int z = Integer.parseInt(p[3]);
+        return world.getBlockAt(x, y, z);
+    }
+
     public static String serialize(Location loc) {
         return loc.getWorld().getName() + ":" + loc.getX() + ":" + loc.getY() + ":" + loc.getZ()
                 + ":" + loc.getYaw() + ":" + loc.getPitch();

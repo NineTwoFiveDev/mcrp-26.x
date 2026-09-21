@@ -39,6 +39,24 @@ commands:
   mug:
     description: Attempt to mug a nearby player for their cash.
     usage: /<command> <player>
+  printer:
+    description: Buy, sell or confiscate the money printer you are looking at.
+    usage: /<command> <buy|sell|confiscate>
+  shipment:
+    description: Buy, list or confiscate weapon/item shipments.
+    usage: /<command> <buy <type>|list|confiscate>
+  kidnap:
+    description: Kidnap a nearby player and demand a ransom.
+    usage: /<command> <player> <ransom>
+  payransom:
+    description: Pay a kidnapped player's ransom to free them.
+    usage: /<command> <player>
+  freekidnap:
+    description: Free a kidnapped player without paying their ransom.
+    usage: /<command> <player>
+  warrant:
+    description: Issue a warrant letting police bypass a player's locked doors.
+    usage: /<command> <player> [seconds]
   darkrp:
     description: DarkRP administration command.
     usage: /<command> <reload|setbalance|give> [args]

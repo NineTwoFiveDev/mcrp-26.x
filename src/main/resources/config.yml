@@ -40,3 +40,29 @@ mug:
   # Police (jobs with police: true) cannot be targeted by /mug.
   police-immune: true
   cooldown-seconds: 30
+
+printer:
+  price: 750.0
+  # Block placed on top of the spot you're looking at. Must match a Material enum name.
+  marker-material: IRON_BLOCK
+  interval-seconds: 60
+  payout-per-cycle: 35.0
+  # Chance (0.0-1.0) a printer is destroyed each payout cycle instead of paying out.
+  bust-chance: 0.05
+  max-per-player: 3
+  # Percentage of the purchase price refunded when a printer is sold back.
+  resale-percentage: 40
+  # Job ids allowed to buy printers. Empty list = anyone.
+  allowed-jobs: []
+
+kidnap:
+  max-distance: 3.0
+  # How far the victim can wander from the capture point before being snapped back.
+  radius: 5.0
+  timeout-seconds: 120
+  cooldown-seconds: 45
+  # Police (jobs with police: true) cannot be targeted by /kidnap.
+  police-immune: true
+
+warrant:
+  default-duration-seconds: 300
