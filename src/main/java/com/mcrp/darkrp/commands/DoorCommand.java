@@ -1,6 +1,7 @@
 package com.mcrp.darkrp.commands;
 
 import com.mcrp.darkrp.door.DoorManager;
+import com.mcrp.darkrp.door.DoorMenu;
 import com.mcrp.darkrp.economy.EconomyManager;
 import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class DoorCommand implements CommandExecutor, TabCompleter {
 
-    private static final List<String> SUBCOMMANDS = List.of("buy", "sell", "lock", "unlock", "add", "kick", "price");
+    private static final List<String> SUBCOMMANDS = List.of("buy", "sell", "lock", "unlock", "add", "kick", "price", "info");
 
     private static final int REACH = 6;
 
@@ -37,7 +38,7 @@ public class DoorCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length == 0) {
-            Msg.error(sender, "Usage: /door <buy|sell|lock|unlock|add|kick|price> [player|amount]");
+            Msg.error(sender, "Usage: /door <buy|sell|lock|unlock|add|kick|price|info> [player|amount]");
             return true;
         }
         Block target = doorManager.getTargetDoor(player, REACH);
@@ -55,7 +56,8 @@ public class DoorCommand implements CommandExecutor, TabCompleter {
             case "add" -> handleOwnerChange(player, target, args, true);
             case "kick" -> handleOwnerChange(player, target, args, false);
             case "price" -> handlePrice(player, target, args);
-            default -> Msg.error(sender, "Unknown door subcommand. Use buy, sell, lock, unlock, add, kick or price.");
+            case "info" -> DoorMenu.send(player, doorManager, economy, target);
+            default -> Msg.error(sender, "Unknown door subcommand. Use buy, sell, lock, unlock, add, kick, price or info.");
         }
         return true;
     }

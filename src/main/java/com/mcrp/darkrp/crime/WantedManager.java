@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Tracks wanted status (with expiry) for players.
  */
@@ -51,6 +54,21 @@ public class WantedManager {
     public boolean isWanted(Player player) {
         PlayerRecord record = dataStore.get(player.getUniqueId());
         return record != null && record.isWanted();
+    }
+
+    public String reasonFor(Player player) {
+        PlayerRecord record = dataStore.get(player.getUniqueId());
+        return record != null ? record.getWantedReason() : "";
+    }
+
+    public List<Player> wantedOnlinePlayers() {
+        List<Player> wanted = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (isWanted(player)) {
+                wanted.add(player);
+            }
+        }
+        return wanted;
     }
 
     public void startExpiryTask() {

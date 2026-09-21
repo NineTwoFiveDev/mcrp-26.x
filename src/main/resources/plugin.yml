@@ -25,8 +25,8 @@ commands:
     description: Manage the door you are looking at.
     usage: /<command> <buy|sell|lock|unlock|add|kick|price|info> [args]
   wanted:
-    description: Put a bounty / wanted status on a player.
-    usage: /<command> <player> [reason]
+    description: Put a bounty / wanted status on a player, or list who's wanted.
+    usage: /<command> <player> [reason]|list
   unwanted:
     description: Clear a player's wanted status.
     usage: /<command> <player>
