@@ -3,17 +3,23 @@ package com.mcrp.darkrp.commands;
 import com.mcrp.darkrp.economy.EconomyManager;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.printer.PrinterManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class PrinterCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class PrinterCommand implements CommandExecutor, TabCompleter {
 
     private static final int REACH = 5;
+    private static final List<String> SUBCOMMANDS = List.of("buy", "sell", "confiscate");
 
     private final PrinterManager printerManager;
     private final JobManager jobManager;
@@ -86,5 +92,13 @@ public class PrinterCommand implements CommandExecutor {
             case NOT_A_PRINTER -> Msg.error(player, "You must be looking at a money printer.");
             default -> Msg.error(player, "Couldn't confiscate that printer.");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.filter(SUBCOMMANDS, args[0]);
+        }
+        return Collections.emptyList();
     }
 }

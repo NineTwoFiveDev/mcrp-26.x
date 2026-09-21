@@ -3,14 +3,20 @@ package com.mcrp.darkrp.commands;
 import com.mcrp.darkrp.crime.JailManager;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.storage.DataStore;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class ReleaseCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ReleaseCommand implements CommandExecutor, TabCompleter {
 
     private final JailManager jailManager;
     private final JobManager jobManager;
@@ -45,5 +51,20 @@ public class ReleaseCommand implements CommandExecutor {
         jailManager.release(target);
         Msg.success(sender, "You released " + target.getName() + " from jail.");
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length != 1) {
+            return Collections.emptyList();
+        }
+        List<String> jailed = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            var record = dataStore.get(player.getUniqueId());
+            if (record != null && record.isJailed()) {
+                jailed.add(player.getName());
+            }
+        }
+        return Completions.filter(jailed, args[0]);
     }
 }

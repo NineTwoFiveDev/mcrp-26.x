@@ -15,7 +15,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -58,6 +60,17 @@ public class KidnapManager {
 
     public boolean isKidnapped(Player player) {
         return sessions.containsKey(player.getUniqueId());
+    }
+
+    public List<String> kidnappedPlayerNames() {
+        List<String> names = new ArrayList<>();
+        for (UUID victimId : sessions.keySet()) {
+            Player victim = Bukkit.getPlayer(victimId);
+            if (victim != null) {
+                names.add(victim.getName());
+            }
+        }
+        return names;
     }
 
     public void attemptKidnap(Player kidnapper, Player target, double ransom) {

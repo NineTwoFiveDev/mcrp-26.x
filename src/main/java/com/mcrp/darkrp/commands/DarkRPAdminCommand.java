@@ -5,15 +5,22 @@ import com.mcrp.darkrp.economy.EconomyManager;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.printer.PrinterManager;
 import com.mcrp.darkrp.shipment.ShipmentManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
 
-public class DarkRPAdminCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class DarkRPAdminCommand implements CommandExecutor, TabCompleter {
+
+    private static final List<String> SUBCOMMANDS = List.of("reload", "setbalance", "give");
 
     private final Plugin plugin;
     private final EconomyManager economy;
@@ -93,5 +100,16 @@ public class DarkRPAdminCommand implements CommandExecutor {
             Msg.error(sender, "Invalid amount.");
             return Double.NaN;
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.filter(SUBCOMMANDS, args[0]);
+        }
+        if (args.length == 2 && (args[0].equalsIgnoreCase("setbalance") || args[0].equalsIgnoreCase("give"))) {
+            return Completions.onlinePlayerNames(args[1]);
+        }
+        return Collections.emptyList();
     }
 }

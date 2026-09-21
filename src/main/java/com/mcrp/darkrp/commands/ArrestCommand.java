@@ -2,14 +2,19 @@ package com.mcrp.darkrp.commands;
 
 import com.mcrp.darkrp.crime.JailManager;
 import com.mcrp.darkrp.job.JobManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class ArrestCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class ArrestCommand implements CommandExecutor, TabCompleter {
 
     private static final double MAX_ARREST_DISTANCE = 6.0;
 
@@ -57,5 +62,13 @@ public class ArrestCommand implements CommandExecutor {
         jailManager.jail(target, seconds);
         Msg.success(sender, "You arrested " + target.getName() + " for " + seconds + " seconds.");
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.onlinePlayerNames(args[0]);
+        }
+        return Collections.emptyList();
     }
 }

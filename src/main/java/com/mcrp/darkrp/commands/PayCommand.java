@@ -1,14 +1,19 @@
 package com.mcrp.darkrp.commands;
 
 import com.mcrp.darkrp.economy.EconomyManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class PayCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class PayCommand implements CommandExecutor, TabCompleter {
 
     private final EconomyManager economy;
 
@@ -53,5 +58,13 @@ public class PayCommand implements CommandExecutor {
         Msg.success(player, "You paid " + target.getName() + " " + economy.format(amount) + ".");
         Msg.success(target, player.getName() + " paid you " + economy.format(amount) + ".");
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.onlinePlayerNames(args[0]);
+        }
+        return Collections.emptyList();
     }
 }

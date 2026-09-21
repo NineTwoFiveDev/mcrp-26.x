@@ -3,19 +3,24 @@ package com.mcrp.darkrp.commands;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.model.ShipmentType;
 import com.mcrp.darkrp.shipment.ShipmentManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShipmentCommand implements CommandExecutor {
+public class ShipmentCommand implements CommandExecutor, TabCompleter {
 
     private static final int REACH = 5;
+    private static final List<String> SUBCOMMANDS = List.of("buy", "list", "confiscate");
 
     private final ShipmentManager shipmentManager;
     private final JobManager jobManager;
@@ -90,5 +95,17 @@ public class ShipmentCommand implements CommandExecutor {
             case NOT_A_SHIPMENT -> Msg.error(player, "You must be looking at a shipment crate.");
             default -> Msg.error(player, "Couldn't confiscate that shipment.");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.filter(SUBCOMMANDS, args[0]);
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("buy")) {
+            List<String> ids = shipmentManager.getTypes().stream().map(ShipmentType::getId).collect(Collectors.toList());
+            return Completions.filter(ids, args[1]);
+        }
+        return Collections.emptyList();
     }
 }

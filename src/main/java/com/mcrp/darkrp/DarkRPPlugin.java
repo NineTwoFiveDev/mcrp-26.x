@@ -36,6 +36,8 @@ import com.mcrp.darkrp.printer.PrinterManager;
 import com.mcrp.darkrp.shipment.ShipmentManager;
 import com.mcrp.darkrp.storage.DataStore;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DarkRPPlugin extends JavaPlugin {
@@ -130,23 +132,32 @@ public final class DarkRPPlugin extends JavaPlugin {
     }
 
     private void registerCommands(JobMenu jobMenu) {
-        getCommand("money").setExecutor(new MoneyCommand(economyManager));
-        getCommand("pay").setExecutor(new PayCommand(economyManager));
-        getCommand("jobs").setExecutor(new JobsCommand(jobMenu));
-        getCommand("setjob").setExecutor(new SetJobCommand(jobManager));
-        getCommand("door").setExecutor(new DoorCommand(doorManager, economyManager));
-        getCommand("wanted").setExecutor(new WantedCommand(wantedManager, jobManager));
-        getCommand("unwanted").setExecutor(new UnwantedCommand(wantedManager, jobManager));
-        getCommand("arrest").setExecutor(new ArrestCommand(jailManager, jobManager));
-        getCommand("release").setExecutor(new ReleaseCommand(jailManager, jobManager, dataStore));
-        getCommand("mug").setExecutor(new MugCommand(mugManager));
-        getCommand("printer").setExecutor(new PrinterCommand(printerManager, jobManager, economyManager));
-        getCommand("shipment").setExecutor(new ShipmentCommand(shipmentManager, jobManager));
-        getCommand("kidnap").setExecutor(new KidnapCommand(kidnapManager));
-        getCommand("payransom").setExecutor(new PayRansomCommand(kidnapManager));
-        getCommand("freekidnap").setExecutor(new FreeKidnapCommand(kidnapManager, jobManager));
-        getCommand("warrant").setExecutor(new WarrantCommand(warrantManager, jobManager));
-        getCommand("darkrp").setExecutor(new DarkRPAdminCommand(this, economyManager, jobManager, doorManager, printerManager, shipmentManager));
+        register("money", new MoneyCommand(economyManager));
+        register("pay", new PayCommand(economyManager));
+        register("jobs", new JobsCommand(jobMenu));
+        register("setjob", new SetJobCommand(jobManager));
+        register("door", new DoorCommand(doorManager, economyManager));
+        register("wanted", new WantedCommand(wantedManager, jobManager));
+        register("unwanted", new UnwantedCommand(wantedManager, jobManager));
+        register("arrest", new ArrestCommand(jailManager, jobManager));
+        register("release", new ReleaseCommand(jailManager, jobManager, dataStore));
+        register("mug", new MugCommand(mugManager));
+        register("printer", new PrinterCommand(printerManager, jobManager, economyManager));
+        register("shipment", new ShipmentCommand(shipmentManager, jobManager));
+        register("kidnap", new KidnapCommand(kidnapManager));
+        register("payransom", new PayRansomCommand(kidnapManager));
+        register("freekidnap", new FreeKidnapCommand(kidnapManager, jobManager));
+        register("warrant", new WarrantCommand(warrantManager, jobManager));
+        register("darkrp", new DarkRPAdminCommand(this, economyManager, jobManager, doorManager, printerManager, shipmentManager));
+    }
+
+    /** Registers a command's executor, and its tab completer too if it implements one. */
+    private void register(String name, CommandExecutor executor) {
+        var command = getCommand(name);
+        command.setExecutor(executor);
+        if (executor instanceof TabCompleter completer) {
+            command.setTabCompleter(completer);
+        }
     }
 
     private void registerListeners() {

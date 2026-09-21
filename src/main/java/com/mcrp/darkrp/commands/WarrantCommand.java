@@ -2,14 +2,19 @@ package com.mcrp.darkrp.commands;
 
 import com.mcrp.darkrp.crime.WarrantManager;
 import com.mcrp.darkrp.job.JobManager;
+import com.mcrp.darkrp.util.Completions;
 import com.mcrp.darkrp.util.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class WarrantCommand implements CommandExecutor {
+import java.util.Collections;
+import java.util.List;
+
+public class WarrantCommand implements CommandExecutor, TabCompleter {
 
     private final WarrantManager warrantManager;
     private final JobManager jobManager;
@@ -46,5 +51,13 @@ public class WarrantCommand implements CommandExecutor {
         Msg.success(sender, "Issued a " + seconds + "s warrant for " + target.getName()
                 + ". Police can now bypass their locked doors.");
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return Completions.onlinePlayerNames(args[0]);
+        }
+        return Collections.emptyList();
     }
 }
