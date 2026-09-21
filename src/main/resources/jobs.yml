@@ -1,0 +1,65 @@
+# Default DarkRP job/class definitions.
+# id: unique lowercase key, also used for permission darkrp.job.<id> when whitelisted: true
+jobs:
+  citizen:
+    display-name: "<white>Citizen</white>"
+    description: "An ordinary resident. No special permissions."
+    salary: 50.0
+    max-slots: -1
+    police: false
+    whitelisted: false
+    kit: []
+
+  police:
+    display-name: "<blue>Police Officer</blue>"
+    description: "Enforce the law: wanted, arrest and jail other players."
+    salary: 120.0
+    max-slots: 4
+    police: true
+    whitelisted: false
+    kit:
+      - "IRON_SWORD:1"
+      - "LEAD:1"
+      - "SHIELD:1"
+
+  mayor:
+    display-name: "<gold>Mayor</gold>"
+    description: "Sets the tone of the city. One per server."
+    salary: 150.0
+    max-slots: 1
+    police: false
+    whitelisted: false
+    kit:
+      - "GOLDEN_HELMET:1"
+
+  medic:
+    display-name: "<light_purple>Medic</light_purple>"
+    description: "Heals injured citizens."
+    salary: 100.0
+    max-slots: 2
+    police: false
+    whitelisted: false
+    kit:
+      - "GOLDEN_APPLE:4"
+      - "SPLASH_POTION:2"
+
+  gun_dealer:
+    display-name: "<red>Gun Dealer</red>"
+    description: "Sells weapons to citizens."
+    salary: 90.0
+    max-slots: 2
+    police: false
+    whitelisted: false
+    kit:
+      - "CROSSBOW:1"
+      - "ARROW:16"
+
+  hobo:
+    display-name: "<gray>Hobo</gray>"
+    description: "Down on their luck. Low salary, no restrictions."
+    salary: 20.0
+    max-slots: -1
+    police: false
+    whitelisted: false
+    kit:
+      - "ROTTEN_FLESH:8"

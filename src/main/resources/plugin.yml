@@ -1,0 +1,53 @@
+name: DarkRP
+version: '${version}'
+main: com.mcrp.darkrp.DarkRPPlugin
+api-version: '1.21'
+author: mcrp
+description: A self-contained DarkRP-style roleplay gamemode.
+folia-supported: false
+
+commands:
+  money:
+    description: Check your (or another player's) balance.
+    aliases: [balance, bal, cash]
+    usage: /<command> [player]
+  pay:
+    description: Pay another player from your balance.
+    usage: /<command> <player> <amount>
+  jobs:
+    description: Open the job selection menu.
+    aliases: [f4, jobmenu]
+  setjob:
+    description: Force-set a player's job.
+    usage: /<command> <player> <jobId>
+    permission: darkrp.admin
+  door:
+    description: Manage the door you are looking at.
+    usage: /<command> <buy|sell|lock|unlock|add|kick|price|info> [args]
+  wanted:
+    description: Put a bounty / wanted status on a player.
+    usage: /<command> <player> [reason]
+  unwanted:
+    description: Clear a player's wanted status.
+    usage: /<command> <player>
+  arrest:
+    description: Arrest a nearby player and send them to jail.
+    usage: /<command> <player> [seconds]
+  release:
+    description: Release a player from jail early.
+    usage: /<command> <player>
+  mug:
+    description: Attempt to mug a nearby player for their cash.
+    usage: /<command> <player>
+  darkrp:
+    description: DarkRP administration command.
+    usage: /<command> <reload|setbalance|give> [args]
+    permission: darkrp.admin
+
+permissions:
+  darkrp.admin:
+    description: Full administrative access to DarkRP.
+    default: op
+  darkrp.police:
+    description: Staff override for police-only commands, regardless of current job.
+    default: op

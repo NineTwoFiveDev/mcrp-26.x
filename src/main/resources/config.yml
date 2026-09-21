@@ -1,0 +1,42 @@
+# DarkRP configuration
+
+currency-symbol: "$"
+starting-balance: 500.0
+default-job: citizen
+
+salary:
+  # How often (in seconds) online players are paid their job's salary.
+  interval-seconds: 300
+
+door:
+  # Price paid to the "bank" for an unowned door with no material-specific override below.
+  default-price: 250.0
+  # Percentage of the purchase price refunded when a door is sold back.
+  resale-percentage: 50
+  # Maximum number of connected door blocks that can be bought/sold/locked as one group.
+  max-group-size: 4
+  # Per-material price overrides. Material names must match Bukkit Material enum names.
+  prices:
+    IRON_DOOR: 500.0
+    OAK_DOOR: 150.0
+
+jail:
+  world: world
+  x: 0.5
+  y: 65.0
+  z: 0.5
+  yaw: 0.0
+  pitch: 0.0
+  default-time-seconds: 60
+
+wanted:
+  default-duration-seconds: 600
+
+mug:
+  channel-seconds: 5
+  max-distance: 3.0
+  min-steal-percent: 10
+  max-steal-percent: 30
+  # Police (jobs with police: true) cannot be targeted by /mug.
+  police-immune: true
+  cooldown-seconds: 30
