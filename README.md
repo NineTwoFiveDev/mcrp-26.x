@@ -35,6 +35,15 @@ internally.
   auto-releases after a timeout.
 - **Warrants** — `/warrant <player> [seconds]` (police-only) lets police
   bypass that player's locked doors for the warrant's duration, for raids.
+- **Lockpicking** — the Thief job's lockpick item lets anyone holding it
+  right-click a locked door to channel an unlock attempt (chance-based, on a
+  cooldown) as an alternative to a warrant. Success/failure and a heads-up to
+  the door's owner are all handled automatically.
+- **Live HUD** — a sidebar scoreboard shows your job, balance and wanted
+  status, refreshed every 2s; toggle it with `/scoreboard`. Your tab-list
+  name is also prefixed with your job's colored name.
+- **Economy leaderboard** — `/baltop [count]` lists the richest known
+  players, online or offline.
 
 ## Project layout
 
@@ -45,13 +54,15 @@ src/main/java/com/mcrp/darkrp/
   storage/                 - DataStore (players.yml persistence)
   economy/                 - EconomyManager
   job/                     - JobManager, job GUI
-  door/                    - DoorManager, door interact listener
-  crime/                   - WantedManager, JailManager, MugManager, KidnapManager, WarrantManager
+  door/                    - DoorManager, door interact/menu logic
+  crime/                   - WantedManager, JailManager, MugManager, KidnapManager,
+                              WarrantManager, LockpickManager
   printer/                 - PrinterManager, printer interact listener
   shipment/                - ShipmentManager
+  hud/                     - ScoreboardManager (sidebar HUD)
   commands/                - one CommandExecutor per command
   listeners/               - join/quit
-  util/                    - Msg (MiniMessage), ItemUtil, LocUtil
+  util/                    - Msg (MiniMessage), ItemUtil, LocUtil, Completions
 src/main/resources/
   plugin.yml, config.yml, jobs.yml, shipments.yml
 ```
@@ -98,7 +109,8 @@ If your server actually runs an older/newer Paper version, bump the
   prices/resale %, jail location & default sentence, wanted duration, mug
   tuning (range, channel time, steal %, cooldown), printer tuning (price,
   payout, bust chance, limits), kidnap tuning (range, radius, timeout,
-  cooldown) and the default warrant duration.
+  cooldown), the default warrant duration, lockpick tuning (item, channel
+  time, success chance, cooldown) and whether the sidebar HUD is enabled.
 - `jobs.yml` — add/edit/remove jobs. Kit items use `MATERIAL:AMOUNT` strings.
 - `shipments.yml` — add/edit/remove buyable shipment types (item, amount,
   price, allowed jobs).

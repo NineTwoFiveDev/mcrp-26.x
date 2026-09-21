@@ -63,3 +63,13 @@ jobs:
     whitelisted: false
     kit:
       - "ROTTEN_FLESH:8"
+
+  thief:
+    display-name: "<dark_purple>Thief</dark_purple>"
+    description: "Picks locks instead of buying doors. Comes with a lockpick."
+    salary: 60.0
+    max-slots: 3
+    police: false
+    whitelisted: false
+    kit:
+      - "TRIPWIRE_HOOK:1"

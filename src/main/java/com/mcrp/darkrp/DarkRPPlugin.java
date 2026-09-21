@@ -1,6 +1,7 @@
 package com.mcrp.darkrp;
 
 import com.mcrp.darkrp.commands.ArrestCommand;
+import com.mcrp.darkrp.commands.BalTopCommand;
 import com.mcrp.darkrp.commands.DarkRPAdminCommand;
 import com.mcrp.darkrp.commands.DoorCommand;
 import com.mcrp.darkrp.commands.FreeKidnapCommand;
@@ -12,6 +13,7 @@ import com.mcrp.darkrp.commands.PayCommand;
 import com.mcrp.darkrp.commands.PayRansomCommand;
 import com.mcrp.darkrp.commands.PrinterCommand;
 import com.mcrp.darkrp.commands.ReleaseCommand;
+import com.mcrp.darkrp.commands.ScoreboardCommand;
 import com.mcrp.darkrp.commands.SetJobCommand;
 import com.mcrp.darkrp.commands.ShipmentCommand;
 import com.mcrp.darkrp.commands.UnwantedCommand;
@@ -20,12 +22,14 @@ import com.mcrp.darkrp.commands.WarrantCommand;
 import com.mcrp.darkrp.crime.JailGuardListener;
 import com.mcrp.darkrp.crime.JailManager;
 import com.mcrp.darkrp.crime.KidnapManager;
+import com.mcrp.darkrp.crime.LockpickManager;
 import com.mcrp.darkrp.crime.MugManager;
 import com.mcrp.darkrp.crime.WantedManager;
 import com.mcrp.darkrp.crime.WarrantManager;
 import com.mcrp.darkrp.door.DoorInteractListener;
 import com.mcrp.darkrp.door.DoorManager;
 import com.mcrp.darkrp.economy.EconomyManager;
+import com.mcrp.darkrp.hud.ScoreboardManager;
 import com.mcrp.darkrp.job.JobManager;
 import com.mcrp.darkrp.job.JobMenu;
 import com.mcrp.darkrp.job.JobMenuListener;
@@ -53,6 +57,8 @@ public final class DarkRPPlugin extends JavaPlugin {
     private ShipmentManager shipmentManager;
     private KidnapManager kidnapManager;
     private WarrantManager warrantManager;
+    private LockpickManager lockpickManager;
+    private ScoreboardManager scoreboardManager;
 
     @Override
     public void onEnable() {
@@ -74,6 +80,8 @@ public final class DarkRPPlugin extends JavaPlugin {
         mugManager = new MugManager(this, dataStore, economyManager, jobManager);
         warrantManager = new WarrantManager(this);
         kidnapManager = new KidnapManager(this, dataStore, economyManager, jobManager);
+        lockpickManager = new LockpickManager(this, doorManager);
+        scoreboardManager = new ScoreboardManager(this, economyManager, jobManager, wantedManager, dataStore);
 
         printerManager = new PrinterManager(this, economyManager, jobManager, dataStore);
         printerManager.load();
@@ -91,6 +99,7 @@ public final class DarkRPPlugin extends JavaPlugin {
         jailManager.startTickTask();
         printerManager.startTickTask();
         kidnapManager.startTickTask();
+        scoreboardManager.startUpdateTask();
 
         long autosaveTicks = 5L * 60L * 20L;
         Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -118,6 +127,9 @@ public final class DarkRPPlugin extends JavaPlugin {
         }
         if (kidnapManager != null) {
             kidnapManager.stopTickTask();
+        }
+        if (scoreboardManager != null) {
+            scoreboardManager.stopUpdateTask();
         }
         if (dataStore != null) {
             dataStore.save();
@@ -148,6 +160,8 @@ public final class DarkRPPlugin extends JavaPlugin {
         register("payransom", new PayRansomCommand(kidnapManager));
         register("freekidnap", new FreeKidnapCommand(kidnapManager, jobManager));
         register("warrant", new WarrantCommand(warrantManager, jobManager));
+        register("scoreboard", new ScoreboardCommand(scoreboardManager));
+        register("baltop", new BalTopCommand(economyManager));
         register("darkrp", new DarkRPAdminCommand(this, economyManager, jobManager, doorManager, printerManager, shipmentManager));
     }
 
@@ -165,7 +179,7 @@ public final class DarkRPPlugin extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(economyManager, jobManager), this);
         pm.registerEvents(new PlayerQuitListener(dataStore), this);
         pm.registerEvents(new JobMenuListener(jobManager), this);
-        pm.registerEvents(new DoorInteractListener(doorManager, economyManager, jobManager, warrantManager), this);
+        pm.registerEvents(new DoorInteractListener(doorManager, economyManager, jobManager, warrantManager, lockpickManager), this);
         pm.registerEvents(new JailGuardListener(dataStore, jailManager), this);
         pm.registerEvents(new PrinterInteractListener(printerManager), this);
     }

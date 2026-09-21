@@ -30,6 +30,7 @@ public class PlayerJoinListener implements Listener {
             }
         }
         Job job = jobManager.getCurrentJob(record);
+        jobManager.applyTabListName(event.getPlayer(), job);
         Msg.success(event.getPlayer(), "Welcome back! You are a <white>" + (job != null ? job.getDisplayName() : "Citizen")
                 + "</white><green> with " + economy.format(record.getBalance()) + "<green>.");
     }

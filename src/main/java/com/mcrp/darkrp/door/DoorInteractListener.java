@@ -1,5 +1,6 @@
 package com.mcrp.darkrp.door;
 
+import com.mcrp.darkrp.crime.LockpickManager;
 import com.mcrp.darkrp.crime.WarrantManager;
 import com.mcrp.darkrp.economy.EconomyManager;
 import com.mcrp.darkrp.job.JobManager;
@@ -19,12 +20,15 @@ public class DoorInteractListener implements Listener {
     private final EconomyManager economy;
     private final JobManager jobManager;
     private final WarrantManager warrantManager;
+    private final LockpickManager lockpickManager;
 
-    public DoorInteractListener(DoorManager doorManager, EconomyManager economy, JobManager jobManager, WarrantManager warrantManager) {
+    public DoorInteractListener(DoorManager doorManager, EconomyManager economy, JobManager jobManager,
+                                 WarrantManager warrantManager, LockpickManager lockpickManager) {
         this.doorManager = doorManager;
         this.economy = economy;
         this.jobManager = jobManager;
         this.warrantManager = warrantManager;
+        this.lockpickManager = lockpickManager;
     }
 
     @EventHandler
@@ -57,6 +61,10 @@ public class DoorInteractListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        if (lockpickManager.isHoldingLockpick(player)) {
+            lockpickManager.attemptPick(player, block);
+            return;
+        }
         Msg.error(player, "This door is locked.");
     }
 }

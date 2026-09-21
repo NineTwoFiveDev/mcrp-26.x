@@ -57,6 +57,11 @@ commands:
   warrant:
     description: Issue a warrant letting police bypass a player's locked doors.
     usage: /<command> <player> [seconds]
+  scoreboard:
+    description: Toggle the DarkRP sidebar scoreboard on or off.
+  baltop:
+    description: List the richest players on the server.
+    usage: /<command> [count]
   darkrp:
     description: DarkRP administration command.
     usage: /<command> <reload|setbalance|give> [args]

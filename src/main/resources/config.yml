@@ -66,3 +66,16 @@ kidnap:
 
 warrant:
   default-duration-seconds: 300
+
+lockpick:
+  # Item that lets a player attempt to pick a locked door instead of buying/warranting it.
+  item: TRIPWIRE_HOOK
+  channel-seconds: 4
+  # Chance (0.0-1.0) an attempt succeeds.
+  success-chance: 0.5
+  cooldown-seconds: 45
+  max-distance: 4.0
+
+scoreboard:
+  # Sidebar HUD showing job, balance and wanted status. Players can hide it with /scoreboard.
+  enabled: true

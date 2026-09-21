@@ -343,6 +343,17 @@ public class DoorManager {
         return group == null ? null : getRecord(group);
     }
 
+    /** Unlocks a door regardless of who owns it, bypassing the usual owner check. Used by lockpicking. */
+    public boolean forceUnlock(Block clicked) {
+        DoorRecord record = getRecordFor(clicked);
+        if (record == null) {
+            return false;
+        }
+        record.setLocked(false);
+        save();
+        return true;
+    }
+
     private void closeGroup(Set<Block> group) {
         for (Block bottom : group) {
             for (Block b : new Block[]{bottom, bottom.getRelative(BlockFace.UP)}) {

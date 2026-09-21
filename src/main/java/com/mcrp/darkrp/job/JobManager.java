@@ -144,7 +144,16 @@ public class JobManager {
         for (ItemStack item : ItemUtil.parseKit(plugin, job.getKit())) {
             player.getInventory().addItem(item.clone());
         }
+        applyTabListName(player, job);
         Msg.success(player, "You are now a <white>" + job.getDisplayName() + "</white><green>.");
+    }
+
+    /** Prefixes the player's tab-list name with their job's colored display name. */
+    public void applyTabListName(Player player, Job job) {
+        if (job == null) {
+            return;
+        }
+        player.playerListName(Msg.parse(job.getDisplayName() + " <white>" + player.getName() + "</white>"));
     }
 
     public void startSalaryTask() {

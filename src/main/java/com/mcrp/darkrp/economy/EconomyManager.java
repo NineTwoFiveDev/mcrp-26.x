@@ -5,7 +5,10 @@ import com.mcrp.darkrp.storage.DataStore;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Balance operations on top of the DataStore. Self-contained economy (no Vault dependency).
@@ -83,5 +86,13 @@ public class EconomyManager {
 
     public String format(double amount) {
         return currencySymbol + String.format("%,.2f", amount);
+    }
+
+    /** The richest known players (online or offline), highest balance first. */
+    public List<PlayerRecord> topBalances(int limit) {
+        return dataStore.all().values().stream()
+                .sorted(Comparator.comparingDouble(PlayerRecord::getBalance).reversed())
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 }
